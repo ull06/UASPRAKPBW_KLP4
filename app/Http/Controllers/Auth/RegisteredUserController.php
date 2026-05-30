@@ -30,21 +30,30 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // 1. Validasi input, kita tambahkan aturan untuk 'role' wajib diisi (owner/pencari)
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'in:owner,pencari'], 
         ]);
 
+        // 2. Simpan data user baru ke database beserta 'role' pilihannya
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, 
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        // 3. Pengalihan halaman otomatis (Redirect) berdasarkan role setelah sukses mendaftar
+        if ($user->role === 'owner') {
+            return redirect()->route('owner.dashboard');
+        }
 
         return redirect(route('dashboard', absolute: false));
     }

@@ -15,8 +15,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Kelola Owner (Sudah memakai OwnerDashboardController sesuai update tim)
-Route::middleware('auth')->prefix('owner')->name('owner.')->group(function () {
+// Kelola Owner (DI SINI KITA TAMBAHKAN 'owner' DI DALAM MIDDLEWARE)
+Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard',          [OwnerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/kos/create',         [KosController::class, 'create'])->name('kos.create');
     Route::post('/kos',               [KosController::class, 'store'])->name('kos.store');
