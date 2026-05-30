@@ -11,13 +11,18 @@ class KosController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->role !== 'owner') {
+    if (auth()->user()->role !== 'owner') {
         abort(403, 'Akses ditolak.');
-        }
-        $kos = auth()->user()->kos()->withCount('reviews')->latest()->get();
-        return view('owner.dashboard', compact('kos'));
     }
+    $kos = auth()->user()->kos()->withCount('reviews')->latest()->get();
+    $totalKos = $kos->count();
+    $totalKosTersedia = $kos->where('status', 'tersedia')->count();
+    $totalReview = $kos->sum('reviews_count');
+    $totalFavorit = auth()->user()->kos()->withCount('favorites')->get()->sum('favorites_count');
 
+    return view('owner.dashboard', compact('kos', 'totalKos', 'totalKosTersedia', 'totalReview', 'totalFavorit'));
+    }
+    
     public function create()
     {
         return view('owner.create');
