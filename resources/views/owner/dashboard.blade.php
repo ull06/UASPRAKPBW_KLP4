@@ -1,49 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head><title>Dashboard Owner</title></head>
-<body>
-<h1>Kos Saya</h1>
+@extends('layouts.app')
 
-@if(session('success'))
-    <p style="color:green">{{ session('success') }}</p>
-@endif
+@section('title', 'Dashboard Owner')
 
-<a href="{{ route('owner.kos.create') }}">+ Tambah Kos</a>
+@section('content')
+    <h4 class="mb-4" style="color: var(--biru); font-weight: 700;">Dashboard Owner</h4>
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Nama Kos</th><th>Harga</th><th>Status</th>
-        <th>Review</th><th>Aksi</th>
-    </tr>
-    @forelse($kos as $k)
-    <tr>
-        <td>{{ $k->nama_kos }}</td>
-        <td>Rp {{ number_format($k->harga, 0, ',', '.') }}</td>
-        <td>
-            <form action="{{ route('owner.kos.status', $k) }}" method="POST">
-                @csrf @method('PATCH')
-                <button type="submit" style="background:{{ $k->status=='tersedia'?'green':'red' }};color:white">
-                    {{ $k->status }}
-                </button>
-            </form>
-        </td>
-        <td>
-            <a href="{{ route('owner.kos.reviews', $k) }}">
-                {{ $k->reviews_count }} review
-            </a>
-        </td>
-        <td>
-            <a href="{{ route('owner.kos.edit', $k) }}">Edit</a> |
-            <form action="{{ route('owner.kos.destroy', $k) }}" method="POST" style="display:inline"
-                  onsubmit="return confirm('Hapus kos ini?')">
-                @csrf @method('DELETE')
-                <button type="submit">Hapus</button>
-            </form>
-        </td>
-    </tr>
-    @empty
-    <tr><td colspan="5">Belum ada kos.</td></tr>
-    @endforelse
-</table>
-</body>
-</html>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Kos Saya</h6>
+                    <h2 style="color: var(--biru);"><?php echo $totalKos; ?></h2>
+                    <i class="fas fa-home fa-2x" style="color: var(--merah);"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Kos Tersedia</h6>
+                    <h2 style="color: var(--biru);"><?php echo $totalKosTersedia; ?></h2>
+                    <i class="fas fa-door-open fa-2x" style="color: var(--merah);"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Review</h6>
+                    <h2 style="color: var(--biru);"><?php echo $totalReview; ?></h2>
+                    <i class="fas fa-star fa-2x" style="color: var(--merah);"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Favorit</h6>
+                    <h2 style="color: var(--biru);"><?php echo $totalFavorit; ?></h2>
+                    <i class="fas fa-heart fa-2x" style="color: var(--merah);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-3">
+        <div class="card-body">
+            <h5 style="color: var(--biru);">Selamat datang, {{ Auth::user()->name ?? 'Owner' }}!</h5>
+            <p class="text-muted">Kelola kos kamu dari sini.</p>
+        </div>
+    </div>
+@endsection
