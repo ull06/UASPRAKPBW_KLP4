@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class AuthenticatedSessionController extends Controller
+{
+    /**
+     * Display the login view.
+     */
+    public function create(): View
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * Handle an incoming authentication request.
+     */
+/**
+     * Handle an incoming authentication request.
+     */
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        //Bersihkan sisa-sisa session lama
+        $request->session()->forget('url.intended');
+
+        $request->session()->regenerate();
+
+        // 1. Ambil data user yang baru saja sukses login
+        $user = $request->user();
+
+        // 2. Paksa pengalihan murni berdasarkan role, tanpa peduli riwayat halaman sebelumnya
+        if ($request->user()->role === 'owner') {
+            return redirect('/owner/dashboard'); 
+        }
+
+        // pencari kos
+        if ($user->role === 'pencari') {
+            return redirect('/pencari/dashboard'); 
+        }
+
+        // Jalur cadangan kalau role tidak terdeteksi
+        return redirect()->route('dashboard');
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+}
