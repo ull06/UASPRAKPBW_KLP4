@@ -42,7 +42,12 @@ class AuthenticatedSessionController extends Controller
             return redirect('/owner/dashboard'); 
         }
 
-        // Jika dia pencari kos, lempar ke dashboard utama
+        // pencari kos
+        if ($user->role === 'pencari') {
+            return redirect('/pencari/dashboard'); 
+        }
+
+        // Jalur cadangan kalau role tidak terdeteksi
         return redirect()->route('dashboard');
     }
 
