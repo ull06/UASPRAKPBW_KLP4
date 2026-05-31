@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KosController;
 use App\Http\Controllers\OwnerDashboardController;
+use App\Http\Controllers\PencariKosDashboardController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -26,6 +27,10 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(fun
     Route::patch('/kos/{kos}/status', [KosController::class, 'toggleStatus'])->name('kos.status');
     Route::delete('/photo/{photo}',   [KosController::class, 'deletePhoto'])->name('photo.delete');
     Route::get('/kos/{kos}/reviews',  [KosController::class, 'reviews'])->name('kos.reviews');
+});
+
+Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->group(function () {
+    Route::get('/dashboard', [PencariKosDashboardController::class, 'index'])->name('dashboard');
 });
 
 // Kelola Profil User
