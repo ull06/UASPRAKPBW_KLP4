@@ -10,8 +10,8 @@ class PencariKosDashboardController extends Controller
 {
     public function index()
     {
-        $totalFavorit = 0;
-        $totalReview = 0;
+        $totalFavorit = auth()->user()->favorites()->count();
+        $totalReview  = auth()->user()->reviews()->count();
 
         return view('pencari.dashboard', compact(
             'totalFavorit',

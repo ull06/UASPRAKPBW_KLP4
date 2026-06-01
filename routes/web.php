@@ -1,12 +1,10 @@
 <?php
-
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KosController;
 use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\PencariKosDashboardController;
-
-require __DIR__.'/auth.php';
+use App\Http\Controllers\KosFinderController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -36,7 +34,13 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(fun
 
 // Routes Pencari
 Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->group(function () {
-    Route::get('/dashboard', [PencariKosDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard',              [PencariKosDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/kos',                    [KosFinderController::class, 'index'])->name('kos.index');
+    Route::get('/kos/{kos}',             [KosFinderController::class, 'show'])->name('kos.show');
+    Route::post('/kos/{kos}/favorit',    [KosFinderController::class, 'addFavorit'])->name('favorit.add');
+    Route::delete('/kos/{kos}/favorit',  [KosFinderController::class, 'removeFavorit'])->name('favorit.remove');
+    Route::get('/favorit',               [KosFinderController::class, 'favorit'])->name('favorit');
+    Route::post('/kos/{kos}/review',     [KosFinderController::class, 'storeReview'])->name('review.store');
 });
 
 // Kelola Profil User
@@ -45,3 +49,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+require __DIR__.'/auth.php';
