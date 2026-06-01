@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KosController;
 use App\Http\Controllers\OwnerDashboardController;
+use App\Http\Controllers\PencariKosDashboardController;
 
 require __DIR__.'/auth.php';
 
@@ -14,17 +16,27 @@ Route::get('/dashboard', function () {
     if (auth()->user()->role === 'owner') {
         return redirect()->route('owner.dashboard');
     }
-    return redirect('/');
+    return redirect()->route('pencari.dashboard');
 })->middleware('auth')->name('dashboard');
 
-Route::middleware('auth')->prefix('owner')->name('owner.')->group(function () {
-    Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/kos/create', [KosController::class, 'create'])->name('kos.create');
-    Route::post('/kos', [KosController::class, 'store'])->name('kos.store');
-    Route::get('/kos/{kos}/edit', [KosController::class, 'edit'])->name('kos.edit');
-    Route::put('/kos/{kos}', [KosController::class, 'update'])->name('kos.update');
-    Route::delete('/kos/{kos}', [KosController::class, 'destroy'])->name('kos.destroy');
+Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(function () {
+    Route::get('/dashboard',          [OwnerDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/kos/create',         [KosController::class, 'create'])->name('kos.create');
+    Route::post('/kos',               [KosController::class, 'store'])->name('kos.store');
+    Route::get('/kos/{kos}/edit',     [KosController::class, 'edit'])->name('kos.edit');
+    Route::put('/kos/{kos}',          [KosController::class, 'update'])->name('kos.update');
+    Route::delete('/kos/{kos}',       [KosController::class, 'destroy'])->name('kos.destroy');
     Route::patch('/kos/{kos}/status', [KosController::class, 'toggleStatus'])->name('kos.status');
-    Route::delete('/photo/{photo}', [KosController::class, 'deletePhoto'])->name('photo.delete');
-    Route::get('/kos/{kos}/reviews', [KosController::class, 'reviews'])->name('kos.reviews');
+    Route::delete('/photo/{photo}',   [KosController::class, 'deletePhoto'])->name('photo.delete');
+    Route::get('/kos/{kos}/reviews',  [KosController::class, 'reviews'])->name('kos.reviews');
+});
+
+Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->group(function () {
+    Route::get('/dashboard', [PencariKosDashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
