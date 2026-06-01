@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KosController;
@@ -12,12 +11,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route Dashboard Umum Bawaan Breeze
+// Redirect setelah login berdasarkan role
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    if (auth()->user()->role === 'owner') {
+        return redirect()->route('owner.dashboard');
+    }
+    return redirect()->route('pencari.dashboard');
+})->middleware('auth')->name('dashboard');
 
-// Kelola Owner
+// Routes Owner
 Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard',          [OwnerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/kos/create',         [KosController::class, 'create'])->name('kos.create');
@@ -30,24 +32,14 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(fun
     Route::get('/kos/{kos}/reviews',  [KosController::class, 'reviews'])->name('kos.reviews');
 });
 
-// Kelola Pencari Kos
+// Routes Pencari
 Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->group(function () {
     Route::get('/dashboard',              [PencariKosDashboardController::class, 'index'])->name('dashboard');
-
-    // Lihat Daftar Kos + Cari + Filter
     Route::get('/kos',                    [KosFinderController::class, 'index'])->name('kos.index');
-
-    // Lihat Detail Kos
     Route::get('/kos/{kos}',             [KosFinderController::class, 'show'])->name('kos.show');
-
-    // Tambah & Hapus Favorit
     Route::post('/kos/{kos}/favorit',    [KosFinderController::class, 'addFavorit'])->name('favorit.add');
     Route::delete('/kos/{kos}/favorit',  [KosFinderController::class, 'removeFavorit'])->name('favorit.remove');
-
-    // Lihat Favorit
     Route::get('/favorit',               [KosFinderController::class, 'favorit'])->name('favorit');
-
-    // Tambah Review + Rating
     Route::post('/kos/{kos}/review',     [KosFinderController::class, 'storeReview'])->name('review.store');
 });
 
