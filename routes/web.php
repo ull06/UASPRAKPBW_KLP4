@@ -6,17 +6,22 @@ use App\Http\Controllers\KosController;
 use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\PencariKosDashboardController;
 
+require __DIR__.'/auth.php';
+
 // Halaman Utama
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route Dashboard Umum Bawaan Breeze
+// Redirect setelah login berdasarkan role
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    if (auth()->user()->role === 'owner') {
+        return redirect()->route('owner.dashboard');
+    }
+    return redirect()->route('pencari.dashboard');
+})->middleware('auth')->name('dashboard');
 
-// Kelola Owner (DI SINI KITA TAMBAHKAN 'owner' DI DALAM MIDDLEWARE)
+// Routes Owner
 Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard',          [OwnerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/kos/create',         [KosController::class, 'create'])->name('kos.create');
@@ -29,6 +34,7 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(fun
     Route::get('/kos/{kos}/reviews',  [KosController::class, 'reviews'])->name('kos.reviews');
 });
 
+// Routes Pencari
 Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->group(function () {
     Route::get('/dashboard', [PencariKosDashboardController::class, 'index'])->name('dashboard');
 });
@@ -39,5 +45,3 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-require __DIR__.'/auth.php';
