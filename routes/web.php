@@ -8,10 +8,12 @@ use App\Http\Controllers\PencariKosDashboardController;
 
 require __DIR__.'/auth.php';
 
+// Halaman Utama
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Redirect setelah login berdasarkan role
 Route::get('/dashboard', function () {
     if (auth()->user()->role === 'owner') {
         return redirect()->route('owner.dashboard');
@@ -19,6 +21,7 @@ Route::get('/dashboard', function () {
     return redirect()->route('pencari.dashboard');
 })->middleware('auth')->name('dashboard');
 
+// Routes Owner
 Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard',          [OwnerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/kos/create',         [KosController::class, 'create'])->name('kos.create');
@@ -31,10 +34,12 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(fun
     Route::get('/kos/{kos}/reviews',  [KosController::class, 'reviews'])->name('kos.reviews');
 });
 
+// Routes Pencari
 Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->group(function () {
     Route::get('/dashboard', [PencariKosDashboardController::class, 'index'])->name('dashboard');
 });
 
+// Kelola Profil User
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
