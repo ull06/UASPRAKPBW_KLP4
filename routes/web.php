@@ -4,9 +4,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KosController;
 use App\Http\Controllers\OwnerDashboardController;
 
+require __DIR__.'/auth.php';
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    if (auth()->user()->role === 'owner') {
+        return redirect()->route('owner.dashboard');
+    }
+    return redirect('/');
+})->middleware('auth')->name('dashboard');
 
 Route::middleware('auth')->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
