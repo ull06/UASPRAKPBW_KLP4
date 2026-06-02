@@ -68,7 +68,7 @@
                 <div class="card border-0 shadow-sm h-100">
                     {{-- Foto --}}
                     @if($k->photos->count())
-                        <img src="{{ asset('storage/'.$k->photos->first()->image_path) }}" 
+                        <img src="{{ asset('images/'.$k->photos->first()->image_path) }}" 
                              class="card-img-top" style="height: 180px; object-fit: cover;">
                     @else
                         <div class="card-img-top d-flex align-items-center justify-content-center" 

@@ -75,7 +75,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card card-kos shadow-sm h-100">
                 @if($kos->photos->isNotEmpty())
-                    <img src="{{ asset('storage/' . $kos->photos->first()->image_path) }}"
+                    <img src="{{ asset('images/' . $kos->photos->first()->image_path) }}"
                          class="card-img-top" alt="{{ $kos->nama_kos }}"
                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                     <div class="img-placeholder" style="display:none"><i class="fas fa-building"></i></div>

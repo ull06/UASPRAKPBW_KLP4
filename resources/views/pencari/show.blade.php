@@ -31,8 +31,8 @@
     {{-- Kiri: Foto & Ulasan --}}
     <div class="col-lg-7">
         @if($kos->photos->isNotEmpty())
-            <img id="mainPhoto" src="{{ asset('storage/'.$kos->photos->first()->image_path) }}"
-                 class="main-img mb-3 shadow-sm" alt="{{ $kos->nama_kos }}">
+            <img id="mainPhoto" src="{{ asset('images/' . $kos->photos->first()->image_path) }}"
+                class="main-img mb-3 shadow-sm" alt="{{ $kos->nama_kos }}">
         @else
             <div class="img-placeholder-main mb-3"><i class="fas fa-building"></i></div>
         @endif
@@ -41,8 +41,8 @@
         <div class="row g-2 mb-3">
             @foreach($kos->photos as $foto)
             <div class="col-3">
-                <img src="{{ asset('storage/'.$foto->image_path) }}" class="gallery-img"
-                     onclick="document.getElementById('mainPhoto').src=this.src">
+                <img src="{{ asset('images/' . $foto->image_path) }}" class="gallery-img"
+                 onclick="document.getElementById('mainPhoto').src=this.src">
             </div>
             @endforeach
         </div>
