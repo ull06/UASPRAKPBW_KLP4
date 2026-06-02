@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Photo;
 use App\Models\Review;
 use App\Models\Favorite;
+use App\Models\Booking;
 
 class Kos extends Model
 {
@@ -46,5 +47,10 @@ class Kos extends Model
     public function favorites()
     {
         return $this->hasMany(Favorite::class, 'kos_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'kos_id');
     }
 }

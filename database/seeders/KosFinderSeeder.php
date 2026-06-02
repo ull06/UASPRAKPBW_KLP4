@@ -17,17 +17,21 @@ class KosFinderSeeder extends Seeder
     public function run(): void
     {
         // 1. Buat Data User Pemilik (Owner)
-        $owner = User::create([
-            'name' => 'Cut Owner Kos',
+        $owner = User::updateOrCreate([
             'email' => 'owner@kosfinder.com',
+        ], [
+            'name' => 'Cut Owner Kos',
+            'phone' => '081234567890',
             'password' => bcrypt('password123'),
             'role' => 'owner',
         ]);
 
         // 2. Buat Data User Pencari Kos
-        $pencari = User::create([
-            'name' => 'Rahmatul Pencari',
+        $pencari = User::updateOrCreate([
             'email' => 'pencari@kosfinder.com',
+        ], [
+            'name' => 'Rahmatul Pencari',
+            'phone' => '081298765432',
             'password' => bcrypt('password123'),
             'role' => 'pencari',
         ]);

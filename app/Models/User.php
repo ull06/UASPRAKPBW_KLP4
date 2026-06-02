@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Kos;
 use App\Models\Review;
 use App\Models\Favorite;
+use App\Models\Booking;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role',
     ];
@@ -70,5 +72,10 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }
