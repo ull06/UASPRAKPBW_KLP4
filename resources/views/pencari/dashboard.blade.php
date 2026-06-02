@@ -28,8 +28,8 @@
                     <div>
                         <h6 class="text-muted mb-1">Review Saya</h6>
                         <h2 style="color: var(--biru);">{{ $totalReview }}</h2>
-                        <a href="{{ route('pencari.kos.index') }}" class="btn btn-sm btn-outline-primary mt-1">
-                            <i class="fas fa-search me-1"></i>Cari Kos
+                        <a href="{{ route('pencari.review.index') }}" class="btn btn-sm btn-outline-primary mt-1">
+                            <i class="fas fa-star me-1"></i>Lihat Review
                         </a>
                     </div>
                     <i class="fas fa-star fa-3x" style="color: var(--merah); opacity:.2;"></i>
@@ -40,7 +40,7 @@
 
     <div class="card border-0 shadow-sm mt-2">
         <div class="card-body">
-            <h5 style="color: var(--biru);">Selamat datang, {{ Auth::user()->name }}! 👋</h5>
+            <h5 style="color: var(--biru);">Selamat datang, {{ Auth::user()->name }}!</h5>
             <p class="text-muted mb-3">Temukan kos impianmu di sini.</p>
             <a href="{{ route('pencari.kos.index') }}" class="btn btn-primary">
                 <i class="fas fa-search me-1"></i>Mulai Cari Kos
