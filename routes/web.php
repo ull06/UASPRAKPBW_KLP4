@@ -44,6 +44,7 @@ Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->gro
     Route::delete('/kos/{kos}/favorit',  [KosFinderController::class, 'removeFavorit'])->name('favorit.remove');
     Route::get('/favorit',               [KosFinderController::class, 'favorit'])->name('favorit');
     Route::post('/kos/{kos}/review',     [KosFinderController::class, 'storeReview'])->name('review.store');
+    Route::get('/review',                [KosFinderController::class, 'myReviews'])->name('review.index');
     Route::post('/kos/{kos}/booking',     [BookingController::class, 'store'])->name('booking.store');
     Route::get('/bookings',               [BookingController::class, 'pencariIndex'])->name('bookings.index');
 });
