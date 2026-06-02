@@ -42,8 +42,8 @@
         <div class="card-body">
             <h5 style="color: var(--biru);">Selamat datang, {{ Auth::user()->name }}! 👋</h5>
             <p class="text-muted mb-3">Temukan kos impianmu di sini.</p>
-            <a href="{{ route('pencari.kos.index') }}" class="btn btn-primary">
-                <i class="fas fa-search me-2"></i>Mulai Cari Kos
+            <a href="{{ route('pencari.review') }}" class="btn btn-primary">
+                <i class="fas fa-star me-1"></i>Lihat Review
             </a>
         </div>
     </div>
