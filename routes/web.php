@@ -5,6 +5,7 @@ use App\Http\Controllers\KosController;
 use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\PencariKosDashboardController;
 use App\Http\Controllers\KosFinderController;
+use App\Http\Controllers\BookingController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -30,6 +31,8 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(fun
     Route::patch('/kos/{kos}/status', [KosController::class, 'toggleStatus'])->name('kos.status');
     Route::delete('/photo/{photo}',   [KosController::class, 'deletePhoto'])->name('photo.delete');
     Route::get('/kos/{kos}/reviews',  [KosController::class, 'reviews'])->name('kos.reviews');
+    Route::get('/bookings',           [BookingController::class, 'ownerIndex'])->name('bookings.index');
+    Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.status');
 });
 
 // Routes Pencari
@@ -42,6 +45,8 @@ Route::middleware(['auth', 'pencari'])->prefix('pencari')->name('pencari.')->gro
     Route::get('/favorit',               [KosFinderController::class, 'favorit'])->name('favorit');
     Route::post('/kos/{kos}/review',     [KosFinderController::class, 'storeReview'])->name('review.store');
     Route::get('/review',                [KosFinderController::class, 'myReviews'])->name('review.index');
+    Route::post('/kos/{kos}/booking',     [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/bookings',               [BookingController::class, 'pencariIndex'])->name('bookings.index');
 });
 
 // Kelola Profil User

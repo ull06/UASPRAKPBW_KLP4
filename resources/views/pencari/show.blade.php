@@ -164,6 +164,42 @@
                     </button>
                 </form>
 
+                @php
+                    $phone = preg_replace('/\D/', '', (string) $kos->user->phone);
+                    if (str_starts_with($phone, '0')) {
+                        $phone = '62' . substr($phone, 1);
+                    }
+                    $whatsAppUrl = $phone
+                        ? 'https://wa.me/' . $phone . '?text=' . urlencode('Halo, saya tertarik dengan ' . $kos->nama_kos . '.')
+                        : null;
+                @endphp
+
+                @if($whatsAppUrl)
+                    <a href="{{ $whatsAppUrl }}" target="_blank" class="btn btn-success w-100 mb-2">
+                        <i class="fab fa-whatsapp me-2"></i>Hubungi via WhatsApp
+                    </a>
+                @else
+                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" disabled>
+                        <i class="fab fa-whatsapp me-2"></i>Nomor WhatsApp belum tersedia
+                    </button>
+                @endif
+
+                <form method="POST" action="{{ route('pencari.booking.store', $kos) }}" class="mb-2">
+                    @csrf
+                    <button type="submit"
+                            class="btn btn-primary w-100"
+                            {{ $kos->status !== 'tersedia' || $hasPendingBooking ? 'disabled' : '' }}>
+                        <i class="fas fa-bed me-2"></i>
+                        @if($kos->status !== 'tersedia')
+                            Kamar Tidak Tersedia
+                        @elseif($hasPendingBooking)
+                            Pengajuan Sudah Dikirim
+                        @else
+                            Pesan Kamar
+                        @endif
+                    </button>
+                </form>
+
                 <a href="{{ route('pencari.kos.index') }}" class="btn btn-outline-secondary w-100">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>

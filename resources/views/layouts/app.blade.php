@@ -58,9 +58,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('pencari.review.index') ? 'active' : '' }}"
-                            href="{{ route('pencari.review.index') }}">
-                                <i class="fas fa-star me-1"></i>Review
+                            <a class="nav-link {{ request()->routeIs('pencari.bookings.*') ? 'active' : '' }}"
+                               href="{{ route('pencari.bookings.index') }}">
+                                <i class="fas fa-bed me-1"></i>Pesanan Saya
                             </a>
                         </li>
                     </ul>
@@ -75,12 +75,21 @@
                                 <i class="fas fa-building me-1"></i>Dashboard
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('owner.bookings.*') ? 'active' : '' }}"
+                               href="{{ route('owner.bookings.index') }}">
+                                <i class="fas fa-clipboard-list me-1"></i>Pengajuan Sewa
+                            </a>
+                        </li>
                     </ul>
                     @endif
                 @endauth
 
                 <div class="ms-auto d-flex align-items-center gap-3">
                     @auth
+                        <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-user-cog me-1"></i>Profil
+                        </a>
                         <span class="navbar-text">
                             <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
                         </span>
