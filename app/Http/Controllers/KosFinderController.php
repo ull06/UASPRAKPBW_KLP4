@@ -114,4 +114,11 @@ class KosFinderController extends Controller
 
         return back()->with('success', 'Review berhasil ditambahkan!');
     }
+    
+    // Lihat Review Saya
+    public function myReviews()
+    {
+        $reviews = auth()->user()->reviews()->with('kos')->latest()->get();
+        return view('pencari.reviews', compact('reviews'));
+    }
 }

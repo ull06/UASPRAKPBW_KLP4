@@ -57,6 +57,12 @@
                                 <i class="fas fa-heart me-1"></i>Favorit
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('pencari.review.index') ? 'active' : '' }}"
+                            href="{{ route('pencari.review.index') }}">
+                                <i class="fas fa-star me-1"></i>Review
+                            </a>
+                        </li>
                     </ul>
                     @endif
 
