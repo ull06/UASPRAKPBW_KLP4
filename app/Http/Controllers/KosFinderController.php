@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kos;
 use App\Models\Favorite;
 use App\Models\Review;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 
 class KosFinderController extends Controller
@@ -52,15 +53,21 @@ class KosFinderController extends Controller
 
         $isFavorit   = false;
         $sudahReview = false;
+        $hasPendingBooking = false;
 
         if (auth()->check()) {
             $isFavorit   = auth()->user()->favorites()->where('kos_id', $kos->id)->exists();
             $sudahReview = auth()->user()->reviews()->where('kos_id', $kos->id)->exists();
+            $hasPendingBooking = Booking::query()
+                ->where('user_id', auth()->id())
+                ->where('kos_id', $kos->id)
+                ->where('status', 'pending')
+                ->exists();
         }
 
         $avgRating = $kos->reviews->avg('rating');
 
-        return view('pencari.show', compact('kos', 'isFavorit', 'sudahReview', 'avgRating'));
+        return view('pencari.show', compact('kos', 'isFavorit', 'sudahReview', 'avgRating', 'hasPendingBooking'));
     }
 
     // Tambah Favorit
